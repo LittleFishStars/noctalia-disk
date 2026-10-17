@@ -1,0 +1,8 @@
+# 调试临时产物
+.scratch/
+*.tmp
+*.log
+
+# Python（本插件不含 Python，留着以防本地脚本）
+__pycache__/
+*.py[cod]

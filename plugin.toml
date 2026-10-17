@@ -1,0 +1,140 @@
+# ══════════════════════════════════════════════════════════════════════════
+# ylxc/disk —— 磁盘占用（状态栏组件 + 详情面板）
+#
+# 数据来自宿主自己的 statvfs 快照（noctalia.diskMounts / noctalia.diskStats），
+# 只读、无常驻进程、无外部依赖：
+#   bar.luau     栏组件：百分比 / 已用-总量 / 剩余 / 剩余百分比 / 迷你进度条
+#   panel.luau   详情面板：每个物理块设备文件系统一张卡片
+#   lib/disk.luau  两者共用的取值、格式化与阈值分级
+#
+# 本地校验：noctalia plugins lint ~/.local/share/noctalia/plugins/ylxc-disk
+# ══════════════════════════════════════════════════════════════════════════
+
+author = "ylxc"
+id = "ylxc/disk"
+name = "Disk Usage"
+description = "Shows disk usage in the bar with a per-filesystem details panel."
+license = "MIT"
+version = "1.0.0"
+plugin_api = 26
+icon = "server"
+dependencies = []
+tags = ["system", "monitor", "bar", "panel"]
+
+# ── 插件级设置：栏组件与面板共用 ────────────────────────────────────────────
+
+[[setting]]
+key = "warn_percent"
+type = "int"
+default = 80
+min = 50
+max = 99
+label_key = "settings.warn_percent.label"
+description_key = "settings.warn_percent.description"
+
+[[setting]]
+key = "crit_percent"
+type = "int"
+default = 90
+min = 51
+max = 100
+label_key = "settings.crit_percent.label"
+description_key = "settings.crit_percent.description"
+
+[[setting]]
+key = "refresh_seconds"
+type = "int"
+default = 30
+min = 2
+max = 600
+label_key = "settings.refresh_seconds.label"
+description_key = "settings.refresh_seconds.description"
+
+[[setting]]
+key = "tooltip_mounts"
+type = "bool"
+default = true
+label_key = "settings.tooltip_mounts.label"
+description_key = "settings.tooltip_mounts.description"
+
+[[setting]]
+key = "tooltip_max"
+type = "int"
+default = 6
+min = 1
+max = 16
+label_key = "settings.tooltip_max.label"
+description_key = "settings.tooltip_max.description"
+visible_when = { key = "tooltip_mounts", values = ["true"] }
+
+# ── 栏组件 ──────────────────────────────────────────────────────────────────
+
+[[widget]]
+id = "usage"
+entry = "bar.luau"
+
+  [[widget.setting]]
+  key = "mount"
+  type = "string"
+  default = ""
+  label_key = "settings.mount.label"
+  description_key = "settings.mount.description"
+
+  [[widget.setting]]
+  key = "display"
+  type = "select"
+  default = "percent"
+  label_key = "settings.display.label"
+  description_key = "settings.display.description"
+  options = [
+    { value = "percent", label_key = "opt_percent" },
+    { value = "used", label_key = "opt_used" },
+    { value = "free", label_key = "opt_free" },
+    { value = "free_percent", label_key = "opt_free_percent" },
+    { value = "bar", label_key = "opt_bar" }
+  ]
+
+  [[widget.setting]]
+  key = "glyph"
+  type = "glyph"
+  default = "server"
+  label_key = "settings.glyph.label"
+  description_key = "settings.glyph.description"
+
+  [[widget.setting]]
+  key = "show_glyph"
+  type = "bool"
+  default = true
+  label_key = "settings.show_glyph.label"
+  description_key = "settings.show_glyph.description"
+
+  [[widget.setting]]
+  key = "glyph_color"
+  type = "select"
+  default = "level"
+  label_key = "settings.glyph_color.label"
+  description_key = "settings.glyph_color.description"
+  options = [
+    { value = "level", label_key = "opt_level" },
+    { value = "theme", label_key = "opt_theme" },
+    { value = "primary", label_key = "opt_primary" },
+    { value = "secondary", label_key = "opt_secondary" },
+    { value = "tertiary", label_key = "opt_tertiary" },
+    { value = "error", label_key = "opt_error" }
+  ]
+
+  # 手势默认值；用户可在设置里改绑或改成 none
+  [widget.actions]
+  left = "panel-toggle ylxc/disk:panel"
+  middle = "settings-open-widget"
+  right = "none"
+
+# ── 详情面板 ────────────────────────────────────────────────────────────────
+
+[[panel]]
+id = "panel"
+entry = "panel.luau"
+width = 420
+height = 400
+placement = "floating"
+position = "center"

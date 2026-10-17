@@ -1,0 +1,75 @@
+{
+  "bar_free": "可用",
+  "level_crit": "接近写满",
+  "level_ok": "正常",
+  "level_warn": "偏高",
+  "opt_bar": "迷你进度条 + 百分比",
+  "opt_error": "告警色",
+  "opt_free": "剩余空间",
+  "opt_free_percent": "剩余百分比",
+  "opt_level": "按阈值",
+  "opt_percent": "占用百分比",
+  "opt_primary": "主题主色",
+  "opt_secondary": "主题次色",
+  "opt_tertiary": "主题第三色",
+  "opt_theme": "跟随组件配色",
+  "opt_used": "已用 / 总量",
+  "panel_empty": "没有找到物理块设备文件系统。",
+  "panel_refresh": "刷新",
+  "panel_updated": "更新于 %s",
+  "panel_used_of": "已用 %s / 共 %s",
+  "settings": {
+    "crit_percent": {
+      "description": "占用率达到或超过这个值，组件切换到告警色。",
+      "label": "告急阈值（%）"
+    },
+    "display": {
+      "description": "图标旁边显示什么内容。",
+      "label": "栏上文字"
+    },
+    "glyph": {
+      "description": "栏上显示的 Tabler 图标。",
+      "label": "图标"
+    },
+    "glyph_color": {
+      "description": "「按阈值」会随磁盘占用程度变色；其余选项固定使用某个主题角色。",
+      "label": "图标颜色"
+    },
+    "mount": {
+      "description": "要监视的路径，例如 / 或 /home；也可以填块设备（/dev/nvme0n1p2）或该文件系统里的任意目录。留空则跟随占用率最高的磁盘。",
+      "label": "挂载点"
+    },
+    "refresh_seconds": {
+      "description": "多久重新读一次 statvfs 快照（2-600 秒）。",
+      "label": "刷新间隔（秒）"
+    },
+    "show_glyph": {
+      "description": "关掉后只保留文字。",
+      "label": "显示图标"
+    },
+    "tooltip_max": {
+      "description": "多出来的文件系统会合并成一行「还有 N 个」。",
+      "label": "悬停最多列出几个磁盘"
+    },
+    "tooltip_mounts": {
+      "description": "在悬停提示里为其它文件系统各加一行。",
+      "label": "悬停时列出所有磁盘"
+    },
+    "warn_percent": {
+      "description": "占用率达到或超过这个值，组件切换到第三主题色。",
+      "label": "偏高阈值（%）"
+    }
+  },
+  "title": "磁盘占用",
+  "tt_device": "设备",
+  "tt_filesystem": "文件系统",
+  "tt_free": "剩余",
+  "tt_hint": "左键查看详情 · 滚轮切换磁盘",
+  "tt_hint_key": "提示",
+  "tt_level": "状态",
+  "tt_more": "还有 %d 个",
+  "tt_mount": "挂载点",
+  "tt_none": "没有找到物理文件系统",
+  "tt_not_found": "没有挂载在 %s 的文件系统",
+  "tt_usage": "占用"
+}

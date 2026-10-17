@@ -1,0 +1,75 @@
+{
+  "bar_free": "free",
+  "level_crit": "Almost full",
+  "level_ok": "Healthy",
+  "level_warn": "Filling up",
+  "opt_bar": "Mini bar + percent",
+  "opt_error": "Error",
+  "opt_free": "Free space",
+  "opt_free_percent": "Free percent",
+  "opt_level": "By threshold",
+  "opt_percent": "Percent used",
+  "opt_primary": "Primary",
+  "opt_secondary": "Secondary",
+  "opt_tertiary": "Tertiary",
+  "opt_theme": "Widget color",
+  "opt_used": "Used / total",
+  "panel_empty": "No physical block-device filesystems found.",
+  "panel_refresh": "Refresh",
+  "panel_updated": "Updated %s",
+  "panel_used_of": "used %s of %s",
+  "settings": {
+    "crit_percent": {
+      "description": "At or above this usage the widget switches to the error color.",
+      "label": "Critical threshold (%)"
+    },
+    "display": {
+      "description": "What the widget shows next to the icon.",
+      "label": "Bar text"
+    },
+    "glyph": {
+      "description": "Tabler icon shown in the bar.",
+      "label": "Glyph"
+    },
+    "glyph_color": {
+      "description": "\"By threshold\" colors the icon by how full the disk is; the other options pin a palette role.",
+      "label": "Icon color"
+    },
+    "mount": {
+      "description": "Path to watch, e.g. / or /home. A device (/dev/nvme0n1p2) or any directory inside the filesystem works too. Leave empty to follow the busiest disk.",
+      "label": "Mount point"
+    },
+    "refresh_seconds": {
+      "description": "How often the statvfs snapshot is re-read (2-600 seconds).",
+      "label": "Refresh interval (s)"
+    },
+    "show_glyph": {
+      "description": "Turn off to keep only the text.",
+      "label": "Show icon"
+    },
+    "tooltip_max": {
+      "description": "Extra filesystems are collapsed into a single \"+N more\" row.",
+      "label": "Max disks in tooltip"
+    },
+    "tooltip_mounts": {
+      "description": "Adds one row per other filesystem to the hover tooltip.",
+      "label": "List all disks in the tooltip"
+    },
+    "warn_percent": {
+      "description": "At or above this usage the widget switches to the tertiary color.",
+      "label": "Warning threshold (%)"
+    }
+  },
+  "title": "Disk Usage",
+  "tt_device": "Device",
+  "tt_filesystem": "Filesystem",
+  "tt_free": "Free",
+  "tt_hint": "Left click: details · scroll: switch disk",
+  "tt_hint_key": "Hint",
+  "tt_level": "Status",
+  "tt_more": "+%d more",
+  "tt_mount": "Mount",
+  "tt_none": "No physical filesystem found",
+  "tt_not_found": "No filesystem mounted at %s",
+  "tt_usage": "Usage"
+}
