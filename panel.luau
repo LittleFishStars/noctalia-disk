@@ -311,6 +311,7 @@ local function body(cfg)
                 srows = subvol.rows({ extra = cfg.paths, cacheMinutes = cfg.cache }, diskRows, state)
             end
         end
+        table.insert(nodes, ui.spacer({ height = 14 }))
         table.insert(nodes, subvolSection(cfg, srows))
     end
 
@@ -349,19 +350,41 @@ end
 
 -- ── 生命周期 ───────────────────────────────────────────────────────────────
 
+-- 面板只在打开期间需要重画：用 1 秒 tick 驱动，再按到期时间节流
+-- （统计进行中 1 秒一画，否则按刷新间隔）
+local lastRenderAt = 0
+
+local open = false
+
+local function draw()
+    lastRenderAt = os.time()
+    render()
+end
+
 function onOpen(_context)
-    update()
+    open = true
+    panel.setWantsSecondTicks(true)
+    noctalia.setUpdateInterval(1000)
+    draw()
+end
+
+function onClose()
+    open = false
+    panel.setWantsSecondTicks(false)
 end
 
 function update()
-    local cfg = settings()
-    -- 统计进行中时刷快一点，进度看得见
-    local seconds = cfg.refresh
-    if cfg.showSubvol and subvol.running() then
-        seconds = math.min(seconds, 2)
+    if not open then
+        return
     end
-    noctalia.setUpdateInterval(disk.clamp(seconds, 2, 600) * 1000)
-    render()
+    local cfg = settings()
+    local due = disk.clamp(cfg.refresh, 2, 600)
+    if cfg.showSubvol and subvol.running() then
+        due = math.min(due, 1)
+    end
+    if os.time() - lastRenderAt >= due then
+        draw()
+    end
 end
 
 render()

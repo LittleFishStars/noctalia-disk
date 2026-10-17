@@ -103,13 +103,14 @@ noctalia plugins lint ~/.local/share/noctalia/plugins/ylxc-disk
 详情面板：
 
 - 上半部分每个物理块设备文件系统一张卡片，含占用百分比、阈值状态、进度条、`已用 / 共` 与 `设备 · 文件系统`；右上角的刷新按钮立即取数。
-- 下半部分是各子卷 / 挂载点：**点某一行**只重新统计这一个，标题右侧的「统计」按钮重新统计所有未统计或已过期的项。统计进行中标题旁显示 `统计中 N 秒…`，并且面板刷新临时加快到 2 秒一次，进度看得见。
+- 下半部分是各子卷 / 挂载点：**点某一行**只重新统计这一个，标题右侧的「统计」按钮重新统计所有未统计或已过期的项。统计进行中标题旁显示 `统计中 N 秒…`，面板打开期间每秒一个 tick、按刷新间隔重画（统计进行中每秒重画），进度看得见。
 
 ## 工作原理与细节
 
 - **数据源**：`noctalia.diskMounts()` 列出物理块设备文件系统（按设备去重、按挂载路径排序），`noctalia.diskStats(path)` 返回该挂载点的一次采样 —— `usagePercent` / `totalBytes` / `freeBytes` / `availableBytes`。两者都接受绝对路径或 `~/` 路径，返回 `nil` 表示路径不可用。
 - **占用率**：用 `usagePercent`（与 `df` 的 `Use%` 一致，即 `(total - free) / total`）。`freeBytes` 与 `availableBytes` 不同，后者已扣掉 root 预留 —— 「剩余可用」显示的是 `availableBytes`。
 - **开销**：栏组件每次刷新只调用一次 `diskMounts` 与一次 `diskStats`；子卷统计只有在需要时才跑，跑完就把结果缓存起来。
+- **面板重画**：面板只在打开期间干活 —— `onOpen` 里开 `panel.setWantsSecondTicks(true)` 与 `noctalia.setUpdateInterval(1000)`，`update()` 再按到期时间节流（统计中 1 秒一画，否则按刷新间隔），`onClose` 关掉 tick，关着的时候不渲染。
 - **配色**：阈值分级 `ok` / `warn` / `crit` → 主题角色 `primary` / `tertiary` / `error`。
 - **IPC**：`noctalia msg plugin ylxc/disk:usage focused refresh`、`next` / `prev`（切换磁盘）、`panel`（开合面板）、`scan`（不等面板就能重跑子卷统计；可以把它绑到快捷键或脚本上）。
 
