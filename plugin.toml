@@ -1,21 +1,21 @@
 # ══════════════════════════════════════════════════════════════════════════
 # ylxc/disk —— 磁盘占用（状态栏组件 + 详情面板）
 #
-# 数据来自宿主自己的 statvfs 快照（noctalia.diskMounts / noctalia.diskStats），
-# 只读、无常驻进程、无外部依赖：
+# 文件系统占用来自宿主的 statvfs 快照（noctalia.diskMounts / noctalia.diskStats）；
+# 子卷占用来自 /proc/self/mountinfo + 一次性后台遍历统计（无常驻进程）：
 #   bar.luau     栏组件：百分比 / 已用-总量 / 剩余 / 剩余百分比 / 迷你进度条
-#   panel.luau   详情面板：每个物理块设备文件系统一张卡片
-#   lib/disk.luau  两者共用的取值、格式化与阈值分级
-#
+#   panel.luau   详情面板：每个文件系统一张卡片 + 各子卷/挂载点占用
+#   lib/disk.luau   两者共用的取值、格式化与阈值分级
+#   lib/subvol.luau 子卷占用：枚举 mountinfo、后台遍历统计、结果缓存
 # 本地校验：noctalia plugins lint ~/.local/share/noctalia/plugins/ylxc-disk
 # ══════════════════════════════════════════════════════════════════════════
 
 author = "ylxc"
 id = "ylxc/disk"
 name = "Disk Usage"
-description = "Shows disk usage in the bar with a per-filesystem details panel."
+description = "Shows disk usage in the bar, with per-filesystem and per-btrfs-subvolume details in the panel."
 license = "MIT"
-version = "1.0.0"
+version = "1.1.0"
 plugin_api = 26
 icon = "server"
 dependencies = []
@@ -67,6 +67,51 @@ label_key = "settings.tooltip_max.label"
 description_key = "settings.tooltip_max.description"
 visible_when = { key = "tooltip_mounts", values = ["true"] }
 
+# ── 子卷占用（面板下半部分） ────────────────────────────────────────────────
+# statvfs 对同一文件系统上的每个子卷返回的是同一组数字（总量/剩余都是整个
+# 文件系统的），所以「/home 自己占了多少」只能遍历统计；这里控制它的口径。
+
+[[setting]]
+key = "show_subvolumes"
+type = "bool"
+default = true
+label_key = "settings.show_subvolumes.label"
+description_key = "settings.show_subvolumes.description"
+
+[[setting]]
+key = "subvol_size_mode"
+type = "select"
+default = "allocated"
+label_key = "settings.subvol_size_mode.label"
+description_key = "settings.subvol_size_mode.description"
+options = [
+  { value = "allocated", label_key = "opt_subvol_allocated" },
+  { value = "apparent", label_key = "opt_subvol_apparent" },
+  { value = "btrfs", label_key = "opt_subvol_btrfs" }
+]
+
+[[setting]]
+key = "subvol_auto_scan"
+type = "bool"
+default = true
+label_key = "settings.subvol_auto_scan.label"
+description_key = "settings.subvol_auto_scan.description"
+
+[[setting]]
+key = "subvol_cache_minutes"
+type = "int"
+default = 720
+min = 10
+max = 10080
+label_key = "settings.subvol_cache_minutes.label"
+description_key = "settings.subvol_cache_minutes.description"
+
+[[setting]]
+key = "subvol_paths"
+type = "string"
+default = ""
+label_key = "settings.subvol_paths.label"
+description_key = "settings.subvol_paths.description"
 # ── 栏组件 ──────────────────────────────────────────────────────────────────
 
 [[widget]]
@@ -135,6 +180,6 @@ entry = "bar.luau"
 id = "panel"
 entry = "panel.luau"
 width = 420
-height = 400
+height = 560
 placement = "floating"
 position = "center"

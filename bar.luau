@@ -16,6 +16,7 @@
 -- ══════════════════════════════════════════════════════════════════════════
 
 local disk = require("./lib/disk.luau")
+local subvol = require("./lib/subvol.luau")
 
 -- 滚轮选中的行号；nil = 跟随设置里的挂载点
 local scrollIndex = nil
@@ -37,6 +38,10 @@ local function settings()
         showAll = disk.flag("tooltip_mounts", true),
         maxRows = disk.number("tooltip_max", 6),
         refresh = disk.number("refresh_seconds", 30),
+        -- 子卷统计（供 IPC 的 scan 事件用；面板自己也会读这几个键）
+        mode = disk.text("subvol_size_mode", "allocated"),
+        extra = disk.text("subvol_paths", ""),
+        cache = disk.number("subvol_cache_minutes", 720),
     }
 end
 
@@ -229,6 +234,15 @@ function onIpc(event, _payload)
         end
     elseif event == "panel" then
         noctalia.togglePanel("ylxc/disk:panel")
+    elseif event == "scan" then
+        -- 不打开面板也能重跑子卷统计（统计过期或新加了 subvol_paths 时有用）
+        local cfg = settings()
+        local fsRows = disk.rows()
+        local state = subvol.collect()
+        local rows = subvol.rows({ extra = cfg.extra, cacheMinutes = cfg.cache }, fsRows, state)
+        if not subvol.running() then
+            subvol.start(subvol.pending(rows), cfg.mode)
+        end
     end
 end
 

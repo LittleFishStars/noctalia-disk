@@ -11,6 +11,9 @@
   "opt_percent": "Percent used",
   "opt_primary": "Primary",
   "opt_secondary": "Secondary",
+  "opt_subvol_allocated": "Used (on disk)",
+  "opt_subvol_apparent": "Files (apparent size)",
+  "opt_subvol_btrfs": "btrfs exclusive",
   "opt_tertiary": "Tertiary",
   "opt_theme": "Widget color",
   "opt_used": "Used / total",
@@ -47,6 +50,26 @@
       "description": "Turn off to keep only the text.",
       "label": "Show icon"
     },
+    "show_subvolumes": {
+      "label": "Show subvolume usage",
+      "description": "List the usage of each mounted btrfs subvolume / mount point in the lower half of the panel. statvfs cannot see this layer, so it is counted by traversal."
+    },
+    "subvol_auto_scan": {
+      "label": "Scan when the panel opens",
+      "description": "Start counting automatically when the panel opens if any subvolume is missing or stale (brief disk I/O). Turn it off to start manually from a row or the Scan button."
+    },
+    "subvol_cache_minutes": {
+      "label": "Subvolume cache (minutes)",
+      "description": "How long a count stays fresh; older rows are shown as needing a recount."
+    },
+    "subvol_paths": {
+      "label": "Extra paths to count",
+      "description": "Additional directories besides mounted subvolumes, separated by commas, e.g. /home/ylxc/.cache; ~ is supported."
+    },
+    "subvol_size_mode": {
+      "label": "Subvolume size mode",
+      "description": "Used = real disk usage after compression (du default); Files = sum of apparent sizes; btrfs exclusive = excludes space shared with snapshots (needs btrfs-progs, some directories need root)."
+    },
     "tooltip_max": {
       "description": "Extra filesystems are collapsed into a single \"+N more\" row.",
       "label": "Max disks in tooltip"
@@ -60,6 +83,23 @@
       "label": "Warning threshold (%)"
     }
   },
+  "subvol_ago_day": "%d d ago",
+  "subvol_ago_hour": "%d h ago",
+  "subvol_ago_min": "%d min ago",
+  "subvol_ago_now": "just now",
+  "subvol_card_tip": "Click to recount only this one",
+  "subvol_empty": "No mounted subvolume found.",
+  "subvol_extra": "extra path",
+  "subvol_lower": "lower bound",
+  "subvol_not_scanned": "not scanned",
+  "subvol_note": "Counted by traversal (no root): unmounted subvolumes are invisible, and space shared with snapshots is counted again.",
+  "subvol_scan_all": "Scan",
+  "subvol_scan_all_tip": "Count every subvolume again",
+  "subvol_scanning": "scanning…",
+  "subvol_scanning_for": "scanning %ds…",
+  "subvol_title": "Subvolumes",
+  "subvol_total": "counted %s of %s",
+  "subvol_total_only": "counted %s",
   "title": "Disk Usage",
   "tt_device": "Device",
   "tt_filesystem": "Filesystem",

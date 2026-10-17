@@ -11,6 +11,9 @@
   "opt_percent": "占用百分比",
   "opt_primary": "主题主色",
   "opt_secondary": "主题次色",
+  "opt_subvol_allocated": "占用（压缩后实际）",
+  "opt_subvol_apparent": "文件合计（原始大小）",
+  "opt_subvol_btrfs": "btrfs exclusive",
   "opt_tertiary": "主题第三色",
   "opt_theme": "跟随组件配色",
   "opt_used": "已用 / 总量",
@@ -47,6 +50,26 @@
       "description": "关掉后只保留文字。",
       "label": "显示图标"
     },
+    "show_subvolumes": {
+      "label": "显示子卷占用",
+      "description": "在面板下半部分列出各 btrfs 子卷 / 挂载点的占用。statvfs 看不到这一层，需要遍历统计。"
+    },
+    "subvol_auto_scan": {
+      "label": "打开面板自动统计",
+      "description": "打开面板时若有未统计或已过期的子卷，自动开始遍历（会短时间占用磁盘 IO）。关掉后点条目或「统计」按钮手动开始。"
+    },
+    "subvol_cache_minutes": {
+      "label": "子卷结果缓存（分钟）",
+      "description": "统计结果保留多久；超过后条目会显示为需要重新统计。"
+    },
+    "subvol_paths": {
+      "label": "额外统计的路径",
+      "description": "除已挂载的子卷外再统计的目录，英文逗号分隔，例如 /home/ylxc/.cache；支持 ~。"
+    },
+    "subvol_size_mode": {
+      "label": "子卷统计口径",
+      "description": "占用＝压缩后的实际占用（du 默认）；文件合计＝文件原始大小之和；btrfs exclusive＝不含与快照共享的空间（需 btrfs-progs，部分目录要 root）。"
+    },
     "tooltip_max": {
       "description": "多出来的文件系统会合并成一行「还有 N 个」。",
       "label": "悬停最多列出几个磁盘"
@@ -60,6 +83,23 @@
       "label": "偏高阈值（%）"
     }
   },
+  "subvol_ago_day": "%d 天前",
+  "subvol_ago_hour": "%d 小时前",
+  "subvol_ago_min": "%d 分钟前",
+  "subvol_ago_now": "刚刚",
+  "subvol_card_tip": "点击只重新统计这一个",
+  "subvol_empty": "没有找到已挂载的子卷。",
+  "subvol_extra": "额外路径",
+  "subvol_lower": "下界",
+  "subvol_not_scanned": "未统计",
+  "subvol_note": "按遍历统计（无 root）：未挂载的子卷看不到，快照与父卷共享的空间会重复计入。",
+  "subvol_scan_all": "统计",
+  "subvol_scan_all_tip": "重新统计所有子卷",
+  "subvol_scanning": "统计中…",
+  "subvol_scanning_for": "统计中 %d 秒…",
+  "subvol_title": "子卷占用",
+  "subvol_total": "合计 %s / 文件系统 %s",
+  "subvol_total_only": "合计 %s",
   "title": "磁盘占用",
   "tt_device": "设备",
   "tt_filesystem": "文件系统",
